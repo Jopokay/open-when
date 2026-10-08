@@ -16,7 +16,7 @@
     STRUTTURA
     Ogni <section class="screen"> è una "schermata".
     Il JS (main.js) ne mostrerà una alla volta.
-    Le schermate sono: gate (opzionale) → loading → home → open-when → letter → things → little-things → finale
+    Le schermate sono: loading → home → open-when → letter → things → little-things → finale
   -->
 
   <!-- Sfondo decorativo (stelle/particelle): lo riempirà il CSS/JS -->
@@ -58,7 +58,7 @@
     <section class="home-mood" aria-labelledby="mood-title">
       <h2 id="mood-title">how are you today?</h2>
       <div class="mood-options">
-        <button type="button" class="mood-button" data-letter="sad">I'm happy</button>
+        <button type="button" class="mood-button" data-reply="Good. That's all I wanted to know.">I'm happy</button>
         <button type="button" class="mood-button" data-letter="sad">I'm sad</button>
         <button type="button" class="mood-button" data-letter="miss-me">I miss you</button>
         <button type="button" class="mood-button" data-letter="laugh">I'm bored</button>
@@ -320,9 +320,6 @@
 
   <!-- Script (da creare nei prossimi passaggi). "defer" = vengono eseguiti dopo il caricamento dell'HTML -->
   <script src="data/letters-data.js" defer></script>
-  <script src="js/player.js" defer></script>
-  <script src="js/letters.js" defer></script>
-  <script src="js/loader.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>
