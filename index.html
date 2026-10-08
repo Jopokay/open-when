@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0b0b14">
+  <title>for you</title>
+
+  <!-- Da creare nei prossimi passaggi -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!--
+    STRUTTURA
+    Ogni <section class="screen"> è una "schermata".
+    Il JS (main.js) ne mostrerà una alla volta.
+    Le schermate sono: gate (opzionale) → loading → home → open-when → letter → things → little-things → finale
+  -->
+
+  <!-- Sfondo decorativo (stelle/particelle): lo riempirà il CSS/JS -->
+  <div id="background" aria-hidden="true"></div>
+
+
+  <!-- =====================================================
+       0. GATE (parola segreta) - OPZIONALE
+       Se non la vuoi, cancella questa sezione.
+       ===================================================== -->
+  <section id="screen-gate" class="screen" data-screen="gate">
+    <div class="gate-box">
+      <p class="gate-text">This place is only for you. What's the secret word?</p>
+      <input type="password" id="gate-input" placeholder="secret word" autocomplete="off">
+      <button type="button" id="gate-button">Enter</button>
+      <p id="gate-error" class="gate-error" hidden>That's not it. Try again.</p>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       1. LOADING
+       ===================================================== -->
+  <section id="screen-loading" class="screen" data-screen="loading">
+    <div class="loading-box">
+      <span class="loading-symbol" aria-hidden="true">✦</span>
+      <h1 class="loading-title">for you</h1>
+      <p id="loading-phrase" class="loading-phrase">preparing...</p>
+
+      <div class="loading-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="loading-bar-fill" class="loading-bar-fill"></div>
+      </div>
+      <p id="loading-percent" class="loading-percent">0%</p>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       2. HOME
+       ===================================================== -->
+  <main id="screen-home" class="screen" data-screen="home" hidden>
+
+    <header class="home-header">
+      <span class="home-symbol" aria-hidden="true">✦</span>
+      <h1 class="home-title">Hey, [name].</h1>
+      <p class="home-intro">
+        I don't really know how to explain why I made this.<br>
+        So I decided to just make you a place instead.
+      </p>
+    </header>
+
+    <!-- Mini check-in "how are you today?" -->
+    <section class="home-mood" aria-labelledby="mood-title">
+      <h2 id="mood-title">how are you today?</h2>
+      <div class="mood-options">
+        <button type="button" class="mood-button" data-letter="sad">I'm happy</button>
+        <button type="button" class="mood-button" data-letter="sad">I'm sad</button>
+        <button type="button" class="mood-button" data-letter="miss-me">I miss you</button>
+        <button type="button" class="mood-button" data-letter="laugh">I'm bored</button>
+      </div>
+      <p id="mood-reply" class="mood-reply" hidden></p>
+    </section>
+
+    <!-- Le tre porte principali -->
+    <nav class="home-nav" aria-label="Sections">
+      <a href="#open-when" class="home-door" data-go="open-when">
+        <span class="door-icon" aria-hidden="true">💌</span>
+        <span class="door-title">Open when...</span>
+        <span class="door-desc">letters for the right moment</span>
+      </a>
+
+      <a href="#things" class="home-door" data-go="things">
+        <span class="door-icon" aria-hidden="true">🌱</span>
+        <span class="door-title">A few things about you</span>
+        <span class="door-desc">the little things I notice</span>
+      </a>
+
+      <a href="#little-things" class="home-door" data-go="little-things">
+        <span class="door-icon" aria-hidden="true">🧩</span>
+        <span class="door-title">Our little things</span>
+        <span class="door-desc">things that only exist between us</span>
+      </a>
+    </nav>
+
+    <!-- Sorpresa finale -->
+    <footer class="home-footer">
+      <p>before you leave...</p>
+      <p>there's something for you.</p>
+      <button type="button" id="finale-button" class="finale-button" aria-label="Open the surprise">✦</button>
+    </footer>
+
+  </main>
+
+
+  <!-- =====================================================
+       3. OPEN WHEN... (griglia di lettere)
+       ===================================================== -->
+  <section id="screen-open-when" class="screen" data-screen="open-when" hidden>
+
+    <button type="button" class="back-button" data-go="home">← back</button>
+
+    <header class="section-header">
+      <h2>Open when...</h2>
+      <p>pick the one you need.</p>
+    </header>
+
+    <!--
+      Le card sono scritte qui a mano per ora.
+      Più avanti il JS può generarle da data/letters-data.js.
+      data-letter = id della lettera
+      data-locked="true" = lettera bloccata
+      data-unlock = data di sblocco (AAAA-MM-GG)
+    -->
+    <div class="letters-grid">
+
+      <button type="button" class="letter-card" data-letter="sad" data-locked="false">
+        <span class="card-icon" aria-hidden="true">💔</span>
+        <span class="card-title">you're sad</span>
+        <span class="card-status">open me</span>
+      </button>
+
+      <button type="button" class="letter-card" data-letter="cant-sleep" data-locked="false">
+        <span class="card-icon" aria-hidden="true">🌙</span>
+        <span class="card-title">you can't sleep</span>
+        <span class="card-status">open me</span>
+      </button>
+
+      <button type="button" class="letter-card" data-letter="miss-me" data-locked="false">
+        <span class="card-icon" aria-hidden="true">🫂</span>
+        <span class="card-title">you miss me</span>
+        <span class="card-status">open me</span>
+      </button>
+
+      <button type="button" class="letter-card" data-letter="angry" data-locked="false">
+        <span class="card-icon" aria-hidden="true">😡</span>
+        <span class="card-title">you're angry at me</span>
+        <span class="card-status">open me</span>
+      </button>
+
+      <button type="button" class="letter-card" data-letter="pretty" data-locked="false">
+        <span class="card-icon" aria-hidden="true">🪞</span>
+        <span class="card-title">you don't feel pretty</span>
+        <span class="card-status">open me</span>
+      </button>
+
+      <button type="button" class="letter-card" data-letter="song" data-locked="false">
+        <span class="card-icon" aria-hidden="true">🎧</span>
+        <span class="card-title">you need a song</span>
+        <span class="card-status">open me</span>
+      </button>
+
+      <button type="button" class="letter-card" data-letter="laugh" data-locked="false">
+        <span class="card-icon" aria-hidden="true">😂</span>
+        <span class="card-title">you need to laugh</span>
+        <span class="card-status">open me</span>
+      </button>
+
+      <button type="button" class="letter-card" data-letter="what-i-think" data-locked="false">
+        <span class="card-icon" aria-hidden="true">❤️</span>
+        <span class="card-title">you want to know what I think about you</span>
+        <span class="card-status">open me</span>
+      </button>
+
+      <!-- Lettere bloccate -->
+      <button type="button" class="letter-card is-locked" data-letter="birthday" data-locked="true" data-unlock="2026-12-31">
+        <span class="card-icon" aria-hidden="true">🎂</span>
+        <span class="card-title">it's your birthday</span>
+        <span class="card-status">🔒 locked</span>
+      </button>
+
+      <button type="button" class="letter-card is-locked" data-letter="100-days" data-locked="true" data-unlock="2027-01-31">
+        <span class="card-icon" aria-hidden="true">📅</span>
+        <span class="card-title">100 days together</span>
+        <span class="card-status">🔒 locked</span>
+      </button>
+
+      <button type="button" class="letter-card is-locked" data-letter="special" data-locked="true" data-unlock="2027-02-14">
+        <span class="card-icon" aria-hidden="true">✨</span>
+        <span class="card-title">something special</span>
+        <span class="card-status">🔒 locked</span>
+      </button>
+
+    </div>
+
+    <p class="locked-note">some things are meant to be opened later.</p>
+
+  </section>
+
+
+  <!-- =====================================================
+       4. LETTERA (una sola schermata riutilizzata)
+       Il JS riempie titolo, testo e canzone in base alla lettera scelta.
+       ===================================================== -->
+  <section id="screen-letter" class="screen" data-screen="letter" hidden>
+
+    <button type="button" class="back-button" data-go="open-when">← all letters</button>
+
+    <!-- Animazione busta: chiusa → si apre → compare la lettera -->
+    <div id="envelope" class="envelope" aria-hidden="true">
+      <div class="envelope-back"></div>
+      <div class="envelope-flap"></div>
+      <div class="envelope-front"></div>
+    </div>
+
+    <article id="letter-paper" class="letter-paper" hidden>
+      <h2 id="letter-title" class="letter-title">Open when...</h2>
+
+      <p id="letter-greeting" class="letter-greeting">Dear [name],</p>
+
+      <div id="letter-body" class="letter-body">
+        <!-- Testo della lettera (inserito dal JS) -->
+        <p>The letter text will go here.</p>
+      </div>
+
+      <p id="letter-signature" class="letter-signature">
+        Love,<br>
+        [your name]
+      </p>
+
+      <!-- Player musicale (senza autoplay) -->
+      <div id="player" class="player" hidden>
+        <p class="player-intro">This one reminded me of you.</p>
+
+        <div class="player-main">
+          <button type="button" id="player-toggle" class="player-toggle" aria-label="Play">▶</button>
+
+          <div class="player-info">
+            <p class="player-label">currently playing</p>
+            <p id="player-song" class="player-song">Song name</p>
+            <p id="player-artist" class="player-artist">Artist</p>
+          </div>
+        </div>
+
+        <input type="range" id="player-progress" class="player-progress" min="0" max="100" value="0" aria-label="Song progress">
+
+        <audio id="player-audio" preload="none"></audio>
+      </div>
+    </article>
+
+  </section>
+
+
+  <!-- =====================================================
+       5. A FEW THINGS ABOUT YOU
+       ===================================================== -->
+  <section id="screen-things" class="screen" data-screen="things" hidden>
+
+    <button type="button" class="back-button" data-go="home">← back</button>
+
+    <header class="section-header">
+      <h2>A few things about you</h2>
+    </header>
+
+    <ol class="things-list">
+      <li class="thing">the way you laugh</li>
+      <li class="thing">the way you talk about things you actually care about</li>
+      <li class="thing">your stupid little jokes</li>
+      <li class="thing">[add your own]</li>
+      <li class="thing">[add your own]</li>
+    </ol>
+
+  </section>
+
+
+  <!-- =====================================================
+       6. OUR LITTLE THINGS
+       ===================================================== -->
+  <section id="screen-little-things" class="screen" data-screen="little-things" hidden>
+
+    <button type="button" class="back-button" data-go="home">← back</button>
+
+    <header class="section-header">
+      <h2>Our little things</h2>
+      <p>things that only exist between us.</p>
+    </header>
+
+    <div class="little-grid">
+
+      <article class="little-card">
+        <h3>that one joke</h3>
+        <p>[write the joke or the line]</p>
+      </article>
+
+      <article class="little-card">
+        <h3>that conversation</h3>
+        <p>[a piece of chat, or two lines you remember]</p>
+      </article>
+
+      <article class="little-card">
+        <h3>that song</h3>
+        <p>[title and why]</p>
+      </article>
+
+      <article class="little-card">
+        <h3>that stupid photo</h3>
+        <figure>
+          <img src="assets/img/stupid-photo.jpg" alt="[describe the photo]" loading="lazy">
+          <figcaption>[caption]</figcaption>
+        </figure>
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       7. FINALE (schermo nero + una sola frase)
+       ===================================================== -->
+  <section id="screen-finale" class="screen" data-screen="finale" hidden>
+    <p class="finale-text">I'm really glad I found you.</p>
+    <button type="button" class="back-button finale-back" data-go="home">back to home</button>
+  </section>
+
+
+  <!-- Script (da creare nei prossimi passaggi). "defer" = vengono eseguiti dopo il caricamento dell'HTML -->
+  <script src="data/letters-data.js" defer></script>
+  <script src="js/player.js" defer></script>
+  <script src="js/letters.js" defer></script>
+  <script src="js/loader.js" defer></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
