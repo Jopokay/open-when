@@ -1,0 +1,198 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap");
+
+/* ---------- Variabili (cambia i colori qui) ---------- */
+:root {
+  --bg: #0b0b14;
+  --bg-soft: #15132a;
+  --text: #f3ede4;
+  --muted: #a9a3b8;
+  --pink: #e3b0cc;
+  --violet: #8f86d9;
+  --line: rgba(243, 237, 228, 0.14);
+  --paper: #f3ede4;
+  --ink: #1d1829;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --sans: "Inter", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; }
+[hidden] { display: none !important; }
+
+html { background: var(--bg); }
+
+body {
+  min-height: 100svh;
+  background: radial-gradient(ellipse at 50% 0%, var(--bg-soft), var(--bg) 65%) fixed;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.15; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--pink); outline-offset: 3px; }
+
+/* ---------- Stelle di sfondo (le crea il JS) ---------- */
+#background { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.star {
+  position: absolute;
+  width: 2px; height: 2px;
+  border-radius: 50%;
+  background: var(--text);
+  opacity: 0.15;
+  animation: twinkle 6s ease-in-out infinite;
+}
+@keyframes twinkle { 50% { opacity: 0.55; } }
+
+/* ---------- Schermate e transizione (fade + blur) ---------- */
+.screen {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 44rem);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: calc(2rem + env(safe-area-inset-top, 0px)) 1.5rem calc(3rem + env(safe-area-inset-bottom, 0px));
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+.screen.is-visible { opacity: 1; filter: none; }
+
+.back-button { color: var(--muted); padding: 0.5rem 0; margin-bottom: 1.5rem; transition: color 0.2s; }
+.back-button:hover { color: var(--text); }
+
+.section-header { margin-bottom: 2rem; }
+.section-header h2 { font-size: clamp(2rem, 7vw, 2.8rem); }
+.section-header p { color: var(--muted); margin-top: 0.4rem; }
+
+/* ---------- 1. Loading ---------- */
+#screen-loading { display: grid; place-items: center; text-align: center; }
+.loading-box { width: min(18rem, 100%); }
+.loading-symbol { display: block; font-size: 1.6rem; color: var(--pink); margin-bottom: 1rem; }
+.loading-title { font-size: 2.2rem; font-style: italic; }
+.loading-phrase { color: var(--muted); font-size: 0.9rem; min-height: 1.6em; margin: 0.6rem 0 1.6rem; }
+.loading-bar { height: 2px; background: var(--line); overflow: hidden; }
+.loading-bar-fill { width: 0; height: 100%; background: linear-gradient(90deg, var(--violet), var(--pink)); }
+.loading-percent { margin-top: 0.8rem; font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---------- 2. Home ---------- */
+.home-header { text-align: center; padding: 14vh 0 3rem; }
+.home-symbol { display: block; color: var(--pink); font-size: 1.4rem; margin-bottom: 1.2rem; }
+.home-title { font-size: clamp(2.8rem, 12vw, 4.5rem); margin-bottom: 1.2rem; }
+.home-intro { color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 1.25rem; }
+
+/* Il momento "orchestrato": l'intro compare riga per riga ogni volta che si entra in home */
+#screen-home.is-visible .home-header > * { animation: rise 1.1s ease both; }
+#screen-home.is-visible .home-title { animation-delay: 0.3s; }
+#screen-home.is-visible .home-intro { animation-delay: 1s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } }
+
+.home-mood { text-align: center; padding: 2rem 0; border-top: 1px solid var(--line); }
+.home-mood h2 { font-size: 1.5rem; margin-bottom: 1.2rem; }
+.mood-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; }
+.mood-button { padding: 0.55rem 1.1rem; border: 1px solid var(--line); border-radius: 999px; transition: border-color 0.2s, background 0.2s; }
+.mood-button:hover { border-color: var(--pink); background: rgba(227, 176, 204, 0.08); }
+.mood-reply { margin-top: 1.2rem; font-family: var(--serif); font-style: italic; font-size: 1.2rem; color: var(--pink); animation: rise 0.7s ease both; }
+
+.home-nav { display: grid; gap: 0.9rem; padding: 2rem 0; border-top: 1px solid var(--line); }
+.home-door { display: grid; gap: 0.15rem; padding: 1.2rem 1.4rem; border: 1px solid var(--line); border-radius: 14px; transition: border-color 0.25s, background 0.25s; }
+.home-door:hover { border-color: var(--violet); background: rgba(143, 134, 217, 0.07); }
+.door-icon { font-size: 1.4rem; }
+.door-title { font-family: var(--serif); font-size: 1.6rem; }
+.door-desc { color: var(--muted); font-size: 0.9rem; }
+
+.home-footer { text-align: center; padding: 3rem 0 1rem; border-top: 1px solid var(--line); color: var(--muted); font-family: var(--serif); font-style: italic; font-size: 1.2rem; }
+.finale-button {
+  margin-top: 1.5rem; width: 3.2rem; height: 3.2rem;
+  border: 1px solid var(--line); border-radius: 50%;
+  color: var(--pink); font-size: 1.2rem;
+  animation: glow 3.5s ease-in-out infinite;
+}
+@keyframes glow { 50% { box-shadow: 0 0 22px rgba(227, 176, 204, 0.4); border-color: var(--pink); } }
+
+/* ---------- 3. Griglia lettere ---------- */
+.letters-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 0.9rem; }
+.letter-card {
+  display: grid; align-content: space-between; gap: 1.2rem;
+  min-height: 9.5rem; padding: 1.1rem; text-align: left;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: rgba(243, 237, 228, 0.03);
+  transition: border-color 0.25s, transform 0.25s;
+}
+.letter-card:hover { border-color: var(--pink); transform: translateY(-3px); }
+.card-icon { font-size: 1.5rem; }
+.card-title { font-family: var(--serif); font-size: 1.2rem; line-height: 1.2; }
+.card-status { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
+.letter-card.is-locked { opacity: 0.5; }
+.letter-card.is-locked:hover { transform: none; border-color: var(--line); }
+.letter-card.shake { animation: shake 0.45s; }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.locked-note { margin-top: 2rem; text-align: center; color: var(--muted); font-style: italic; font-family: var(--serif); font-size: 1.1rem; }
+
+/* ---------- 4. Lettera: busta + carta ---------- */
+.envelope { position: relative; width: min(18rem, 80%); aspect-ratio: 3 / 2; margin: 14vh auto 0; perspective: 800px; transition: opacity 0.6s, transform 0.6s; }
+.envelope > div { position: absolute; }
+.envelope-back { inset: 0; background: #2a2547; border-radius: 6px; }
+.envelope-front { inset: 0; background: #38336a; border-radius: 6px; z-index: 2; clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%); }
+.envelope-flap {
+  top: 0; left: 0; right: 0; height: 55%;
+  background: #463f80; z-index: 3;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform 0.9s ease 0.2s;
+}
+.envelope.is-open .envelope-flap { transform: rotateX(180deg); z-index: 0; }
+.envelope.is-gone { opacity: 0; transform: translateY(-30px) scale(0.96); }
+
+.letter-paper {
+  margin-top: 1rem; padding: 2.2rem 1.8rem;
+  background: var(--paper); color: var(--ink);
+  border-radius: 6px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  font-family: var(--serif); font-size: 1.3rem; line-height: 1.55;
+  animation: unfold 1s ease both;
+}
+@keyframes unfold { from { opacity: 0; transform: translateY(30px) scale(0.97); } }
+.letter-title { font-size: 1rem; font-family: var(--sans); color: #7a7088; margin-bottom: 1.6rem; }
+.letter-greeting { margin-bottom: 1rem; }
+.letter-body p + p { margin-top: 1rem; }
+.letter-signature { margin-top: 1.8rem; font-style: italic; }
+
+/* Player */
+.player { margin-top: 2.2rem; padding-top: 1.4rem; border-top: 1px solid rgba(29, 24, 41, 0.15); font-family: var(--sans); font-size: 0.95rem; }
+.player-intro { font-family: var(--serif); font-style: italic; font-size: 1.2rem; margin-bottom: 1rem; }
+.player-main { display: flex; align-items: center; gap: 1rem; }
+.player-toggle { flex: none; width: 3rem; height: 3rem; border-radius: 50%; background: var(--ink); color: var(--paper); transition: transform 0.2s; }
+.player-toggle:hover { transform: scale(1.06); }
+.player-label { font-size: 0.78rem; color: #7a7088; }
+.player-song { font-weight: 500; line-height: 1.3; }
+.player-artist { color: #5d546b; font-size: 0.88rem; }
+.player-progress { width: 100%; margin-top: 1.1rem; accent-color: var(--ink); }
+
+/* ---------- 5. Things ---------- */
+.things-list { list-style: none; padding: 0; counter-reset: thing; display: grid; gap: 1.6rem; }
+.thing { counter-increment: thing; font-family: var(--serif); font-size: 1.6rem; line-height: 1.25; padding-left: 3rem; position: relative; }
+.thing::before { content: counter(thing, decimal-leading-zero); position: absolute; left: 0; top: 0.5rem; font-family: var(--sans); font-size: 0.8rem; color: var(--pink); }
+
+/* ---------- 6. Little things ---------- */
+.little-grid { display: grid; gap: 1rem; }
+.little-card { padding: 1.4rem; border: 1px solid var(--line); border-radius: 14px; }
+.little-card h3 { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.little-card p, .little-card figcaption { color: var(--muted); }
+.little-card img { display: block; width: 100%; border-radius: 8px; margin-bottom: 0.6rem; }
+
+/* ---------- 7. Finale ---------- */
+#screen-finale { position: fixed; inset: 0; z-index: 10; width: 100%; max-width: none; background: #000; display: grid; place-content: center; text-align: center; gap: 3rem; }
+.finale-text { font-family: var(--serif); font-style: italic; font-size: clamp(1.8rem, 7vw, 3rem); opacity: 0; }
+#screen-finale.is-visible .finale-text { animation: slowfade 3s ease 1.2s forwards; }
+.finale-back { opacity: 0; }
+#screen-finale.is-visible .finale-back { animation: slowfade 2s ease 5s forwards; }
+@keyframes slowfade { to { opacity: 1; } }
+
+/* ---------- Rispetta chi preferisce meno animazioni ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0s !important; transition-duration: 0.01ms !important; }
+  .finale-text, .finale-back { opacity: 1; }
+}
